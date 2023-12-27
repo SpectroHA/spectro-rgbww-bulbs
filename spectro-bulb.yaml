@@ -6,13 +6,13 @@ substitutions:
   # yaml file by redefining them.
   #
   # packages:
-  #   kauf.rgbww: github://KaufHA/kauf-rgbww-bulbs/kauf-bulb.yaml
+  #   spectro.rgbww: github://SpectroHA/spectro-rgbww-bulbs/spectro-bulb.yaml
   #
 
-  name: kauf-bulb              # **** CHANGE DEVICE NAME TO SOMETHING UNIQUE PER DEVICE.  RENAME YAML FILE TO SAME NAME.    ****
-                               # **** USE DASHES (-) INSTEAD OF SPACES OR UNDERSCORE (_).  USE ONLY LOWER CASE LETTERS.     ****
+  name: spectro-bulb              # **** CHANGE DEVICE NAME TO SOMETHING UNIQUE PER DEVICE.  RENAME YAML FILE TO SAME NAME.    ****
+                                  # **** USE DASHES (-) INSTEAD OF SPACES OR UNDERSCORE (_).  USE ONLY LOWER CASE LETTERS.     ****
 
-  friendly_name: Kauf Bulb     # **** CHANGE FRIENDLY NAME TO SOMETHING UNIQUE PER DEVICE ****
+  friendly_name: Spectro Bulb     # **** CHANGE FRIENDLY NAME TO SOMETHING UNIQUE PER DEVICE ****
 
   disable_entities:  "true"    # set to "false" to have all entities show up in Home Assistant automatically
   disable_webserver: "false"   # set to "true" to disable webserver listening on port 80.
@@ -24,7 +24,7 @@ substitutions:
   wifi_ap_timeout: 2min    # default to 2 minute timeout for yaml file as package.
 
   # https://esphome.io/components/esphome.html#esphome-creators-project
-  project_name: Kauf.RGBWW
+  project_name: Spectro.RGBWW
   project_ver_num: "1.923"
   project_ver_let: y
 
@@ -59,12 +59,12 @@ esp8266:
 external_components:
   - source:
       type: git
-      url: https://github.com/KaufHA/common
+      url: https://github.com/SpectroHA/common
       ref: v2023.12.20
     refresh: never
   - source:
       type: git
-      url: https://github.com/KaufHA/kauf-rgbww-bulbs
+      url: https://github.com/SpectroHA/spectro-rgbww-bulbs
     refresh: always
 
 
@@ -130,7 +130,7 @@ logger:
 
 # https://esphome.io/components/api.html
 api:
-  id: kauf_api
+  id: spectro_api
 
 
 # https://esphome.io/components/ota.html
@@ -180,7 +180,7 @@ output:
 light:
 
   # Additive RGB light for Warm White
-  - platform: kauf_rgbww
+  - platform: spectro_rgbww
     id: warm_rgb
     entity_category: config
     default_transition_length: 0ms
@@ -194,7 +194,7 @@ light:
     restore_mode: RESTORE_DEFAULT_OFF
 
 # Additive RGB light for Cold White
-  - platform: kauf_rgbww
+  - platform: spectro_rgbww
     id: cold_rgb
     entity_category: config
     default_transition_length: 0ms
@@ -208,8 +208,8 @@ light:
     restore_mode: RESTORE_DEFAULT_OFF
 
   # Main RGBWW light
-  - platform: kauf_rgbww
-    id: kauf_light
+  - platform: spectro_rgbww
+    id: spectro_light
     default_transition_length: 250ms
     name: $friendly_name
     red: pwm_red
@@ -247,8 +247,8 @@ select:
     icon: mdi:string-lights
     on_value:
       - lambda: |-
-          if ( x == "WLED / DDP" ) { id(kauf_light)->set_use_wled(true); }
-          else                     { id(kauf_light)->set_use_wled(false); }
+          if ( x == "WLED / DDP" ) { id(spectro_light)->set_use_wled(true); }
+          else                     { id(spectro_light)->set_use_wled(false); }
       - script.execute: script_save_changes
 
     entity_category: config
@@ -271,9 +271,9 @@ select:
     disabled_by_default: $disable_entities
     set_action:
       - lambda: |-
-          if      ( x == "Print no packets" )        { id(kauf_light)->set_ddp_debug(0); }
-          else if ( x == "Print imperfect packets" ) { id(kauf_light)->set_ddp_debug(1); }
-          else if ( x == "Print all packets" )       { id(kauf_light)->set_ddp_debug(2); }
+          if      ( x == "Print no packets" )        { id(spectro_light)->set_ddp_debug(0); }
+          else if ( x == "Print imperfect packets" ) { id(spectro_light)->set_ddp_debug(1); }
+          else if ( x == "Print all packets" )       { id(spectro_light)->set_ddp_debug(2); }
 
   # default light state on boot
   - platform: template
@@ -293,16 +293,16 @@ select:
     on_value:
       - lambda: |-
           if ( x == "Restore Power Off State")
-            kauf_light->set_restore_mode(LIGHT_RESTORE_DEFAULT_OFF);
+            spectro_light->set_restore_mode(LIGHT_RESTORE_DEFAULT_OFF);
           else if ( x == "Always On - Last Value")
-            kauf_light->set_restore_mode(LIGHT_RESTORE_AND_ON);
+            spectro_light->set_restore_mode(LIGHT_RESTORE_AND_ON);
           else if ( x == "Always On - Bright White")
-            kauf_light->set_restore_mode(LIGHT_ALWAYS_ON);
+            spectro_light->set_restore_mode(LIGHT_ALWAYS_ON);
           else if ( x == "Always Off")
-            kauf_light->set_restore_mode(LIGHT_RESTORE_AND_OFF);
+            spectro_light->set_restore_mode(LIGHT_RESTORE_AND_OFF);
           else
-            kauf_light->set_restore_mode(LIGHT_$light_restore_mode);
-          kauf_light->save_remote_values_();
+            spectro_light->set_restore_mode(LIGHT_$light_restore_mode);
+          spectro_light->save_remote_values_();
       - script.execute: script_save_changes
     entity_category: config
     forced_hash: 3524332562
@@ -338,7 +338,7 @@ number:      # set max power output for PWMs
           id(pwm_blue).set_max_power(new_power);
           id(pwm_ww).set_max_power(new_power);
           id(pwm_cw).set_max_power(new_power);
-          id(kauf_light)->set_next_write();
+          id(spectro_light)->set_next_write();
       - script.execute: script_save_changes
 
   - platform: template
@@ -358,7 +358,7 @@ number:      # set max power output for PWMs
     forced_addr: 72
     global_addr: global_forced_addr
     on_value:
-      - lambda: id(kauf_light)->set_default_transition_length(x);
+      - lambda: id(spectro_light)->set_default_transition_length(x);
       - script.execute: script_save_changes
 
 
@@ -377,10 +377,10 @@ switch:
     global_addr: global_forced_addr
     restore_mode: RESTORE_DEFAULT_ON
     on_turn_on:
-      - lambda: id(kauf_api)->set_reboot_timeout(0);
+      - lambda: id(spectro_api)->set_reboot_timeout(0);
       - script.execute: script_save_changes
     on_turn_off:
-      - lambda: id(kauf_api)->set_reboot_timeout(900000);
+      - lambda: id(spectro_api)->set_reboot_timeout(900000);
       - script.execute: script_save_changes
 
 
@@ -430,7 +430,7 @@ script:
                 lambda: return ( wifi_wificomponent->tried_loading_creds );
 
             - lambda: |-
-                ESP_LOGD("kauf-bulb.yaml", "quick boot count variable is now 5, overwriting credentials and rebooting");
+                ESP_LOGD("spectro-bulb.yaml", "quick boot count variable is now 5, overwriting credentials and rebooting");
 
                 // overwrite wifi credentials
                 wifi::global_wifi_component->save_wifi_sta("initial_ap","asdfasdfasdfasdf");
@@ -441,7 +441,7 @@ script:
                 global_preferences->sync();
 
                 // turn on red light
-                auto call = id(kauf_light).turn_on();
+                auto call = id(spectro_light).turn_on();
                 call.set_transition_length(500);
                 call.set_brightness(0.6);
                 call.set_rgb(1.0, 0.0, 0.0);
@@ -457,7 +457,7 @@ script:
 
       # increment quick boot counter so it will stay incremented if device reboots
       - lambda: |-
-          ESP_LOGD("kauf-bulb.yaml", "quick boot count variable is now %d.  Need 5 to overwrite credentials", id(global_quick_boot_count));
+          ESP_LOGD("spectro-bulb.yaml", "quick boot count variable is now %d.  Need 5 to overwrite credentials", id(global_quick_boot_count));
           id(global_quick_boot_count) += 1;
           global_quick_boot_count->loop();
           global_preferences->sync();
@@ -468,22 +468,22 @@ script:
             lambda: return ( id(global_quick_boot_count) > 2 );
           then:
             - lambda: |-
-                auto call = id(kauf_light).turn_on();
+                auto call = id(spectro_light).turn_on();
                 call.set_transition_length(500);
                 call.set_brightness(0.5);
                 call.set_rgb(1.0, 1.0, 0.0);
                 call.set_save(false);
                 call.perform();
             - delay: 4s
-            - light.turn_off: kauf_light
+            - light.turn_off: spectro_light
 
       # wait 10 seconds
       - delay: 10s
-      - lambda: ESP_LOGD("kauf-bulb.yaml", "quick boot script, 10 seconds up");
+      - lambda: ESP_LOGD("spectro-bulb.yaml", "quick boot script, 10 seconds up");
 
       # wait until wifi is connected
       - wait_until: wifi.connected
-      - lambda: ESP_LOGD("kauf-bulb.yaml", "quick boot script, wifi connected");
+      - lambda: ESP_LOGD("spectro-bulb.yaml", "quick boot script, wifi connected");
 
       # any time boot is greater than 10 seconds and also connects to wifi, reset quick boot count to 0
       - lambda: |-
