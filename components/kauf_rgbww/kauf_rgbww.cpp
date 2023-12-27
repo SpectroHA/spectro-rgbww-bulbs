@@ -1,5 +1,5 @@
 #include "esphome/core/log.h"
-#include "spectro_rgbww.h"
+#include "kauf_rgbww.h"
 
 namespace esphome {
 namespace spectro_rgbww {
