@@ -60,8 +60,8 @@ external_components:
   - source:
       type: git
       url: https://github.com/SpectroHA/common
-#      ref: v2023.12.20
-    refresh: never
+      ref: v2023.12.26
+    refresh: always
   - source:
       type: git
       url: https://github.com/SpectroHA/spectro-rgbww-bulbs
