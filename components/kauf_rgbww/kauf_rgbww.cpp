@@ -1,16 +1,16 @@
 #include "esphome/core/log.h"
-#include "kauf_rgbww.h"
+#include "spectro_rgbww.h"
 
 namespace esphome {
-namespace kauf_rgbww {
+namespace spectro_rgbww {
 
-static const char *TAG = "kauf_rgbww.light";
+static const char *TAG = "spectro_rgbww.light";
 
-void KaufRGBWWLight::setup() {
+void SpectroRGBWWLight::setup() {
 
 }
 
-light::LightTraits KaufRGBWWLight::get_traits() {
+light::LightTraits SpectroRGBWWLight::get_traits() {
     auto traits = light::LightTraits();
 
     if ( this->is_aux() ) {
@@ -27,7 +27,7 @@ light::LightTraits KaufRGBWWLight::get_traits() {
     return traits;
 }
 
-void KaufRGBWWLight::write_state(light::LightState *state) {
+void SpectroRGBWWLight::write_state(light::LightState *state) {
 
     if ( this->is_aux() ) {
 
@@ -57,7 +57,7 @@ void KaufRGBWWLight::write_state(light::LightState *state) {
     // Presumably WLED applies any desired gamma correction before sending out the values.
     if ( state->current_values.use_raw ) {
 
-        // ESP_LOGD("Kauf Light", "Use Raw - Yes");
+        // ESP_LOGD("Spectro Light", "Use Raw - Yes");
         // state->current_values.use_raw = false;
 
         state->current_values.as_ct(min_mireds, max_mireds, &ct, &white_brightness);
@@ -105,9 +105,9 @@ void KaufRGBWWLight::write_state(light::LightState *state) {
     if ( cold_rgb->current_values.is_on() ) { cold_rgb->current_values_as_rgbw(&cold_red, &cold_green, &cold_blue, &cold_white); }
 
 
-//     ESP_LOGV("Kauf Light", "Input RGBW: - R:%f G:%f B:%f W:%f CT:%f)", red, green, blue, white_brightness, ct);
-//     ESP_LOGV("Kauf Light", " Warm RGBW: - R:%f G:%f B:%f W:%f)", warm_red, warm_green, warm_blue, warm_white);
-//     ESP_LOGV("Kauf Light", " Cold RGBW: - R:%f G:%f B:%f W:%f)", cold_red, cold_green, cold_blue, cold_white);
+//     ESP_LOGV("Spectro Light", "Input RGBW: - R:%f G:%f B:%f W:%f CT:%f)", red, green, blue, white_brightness, ct);
+//     ESP_LOGV("Spectro Light", " Warm RGBW: - R:%f G:%f B:%f W:%f)", warm_red, warm_green, warm_blue, warm_white);
+//     ESP_LOGV("Spectro Light", " Cold RGBW: - R:%f G:%f B:%f W:%f)", cold_red, cold_green, cold_blue, cold_white);
 
 
     // get minimum of input rgb values for blending into white
@@ -143,7 +143,7 @@ void KaufRGBWWLight::write_state(light::LightState *state) {
     scaled_warm  = ceil(scaled_warm  * 1000)/1000;
 
 
-    ESP_LOGV("Kauf Light", "Setting Levels - R:%f G:%f B:%f CW:%f WW:%f)", scaled_red, scaled_green, scaled_blue, scaled_cold, scaled_warm);
+    ESP_LOGV("Spectro Light", "Setting Levels - R:%f G:%f B:%f CW:%f WW:%f)", scaled_red, scaled_green, scaled_blue, scaled_cold, scaled_warm);
 
     // set outputs
     this->red_->set_level(scaled_red);
@@ -157,9 +157,9 @@ void KaufRGBWWLight::write_state(light::LightState *state) {
 
 }
 
-void KaufRGBWWLight::dump_config(){
-    ESP_LOGCONFIG(TAG, "Kauf RGBWW custom light");
+void SpectroRGBWWLight::dump_config(){
+    ESP_LOGCONFIG(TAG, "Spectro RGBWW custom light");
 }
 
-} //namespace kauf_rgbww
+} //namespace spectro_rgbww
 } //namespace esphome
