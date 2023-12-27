@@ -5,9 +5,9 @@
 #include "esphome/components/light/light_output.h"
 
 namespace esphome {
-namespace kauf_rgbww {
+namespace spectro_rgbww {
 
-class KaufRGBWWLight : public light::LightOutput, public Component {
+class SpectroRGBWWLight : public light::LightOutput, public Component {
  public:
   void setup() override;
   light::LightTraits get_traits() override;
@@ -50,5 +50,5 @@ class KaufRGBWWLight : public light::LightOutput, public Component {
 
 };
 
-} //namespace kauf_rgbww
+} //namespace spectro_rgbww
 } //namespace esphome
