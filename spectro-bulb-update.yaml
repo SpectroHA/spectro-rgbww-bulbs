@@ -5,11 +5,11 @@ substitutions:
 
 
 packages:
-  kauf_bulb_base: !include kauf-bulb.yaml
+  spectro_bulb_base: !include spectro-bulb.yaml
 
 
 dashboard_import:
-  package_import_url: github://KaufHA/kauf-rgbww-bulbs/kauf-bulb.yaml
+  package_import_url: github://SpectroHA/spectro-rgbww-bulbs/spectro-bulb.yaml
 
 
 esphome:
