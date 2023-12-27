@@ -15,10 +15,10 @@ from esphome.const import (
     CONF_WARM_WHITE_COLOR_TEMPERATURE,
 )
 
-kauf_rgbww_ns = cg.esphome_ns.namespace('kauf_rgbww')
-KaufRGBWWLight = kauf_rgbww_ns.class_('KaufRGBWWLight', light.LightOutput)
+spectro_rgbww_ns = cg.esphome_ns.namespace('spectro_rgbww')
+SpectroRGBWWLight = spectro_rgbww_ns.class_('SpectroRGBWWLight', light.LightOutput)
 
-def validate_kauf_light(value):
+def validate_spectro_light(value):
     if (value["aux"]):
         if ( "red" in value ):
             raise cv.Invalid("Aux KAUF Light should not have a red PWM output.")
@@ -57,7 +57,7 @@ def validate_kauf_light(value):
 CONFIG_SCHEMA = cv.All(
     light.RGB_LIGHT_SCHEMA.extend(
         {
-            cv.GenerateID(CONF_OUTPUT_ID): cv.declare_id(KaufRGBWWLight),
+            cv.GenerateID(CONF_OUTPUT_ID): cv.declare_id(SpectroRGBWWLight),
             cv.Optional(CONF_RED): cv.use_id(output.FloatOutput),
             cv.Optional(CONF_GREEN): cv.use_id(output.FloatOutput),
             cv.Optional(CONF_BLUE): cv.use_id(output.FloatOutput),
@@ -76,7 +76,7 @@ CONFIG_SCHEMA = cv.All(
         [CONF_COLD_WHITE_COLOR_TEMPERATURE, CONF_WARM_WHITE_COLOR_TEMPERATURE]
     ),
     light.validate_color_temperature_channels,
-    validate_kauf_light
+    validate_spectro_light
 )
 
 
